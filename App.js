@@ -1,21 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import Home from './screens/Home'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+import ToDoList from './screens/ToDoList'
+
+let Stack = createStackNavigator()
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Hello world</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name='Fire App' component={ Home } />
+        <Stack.Screen
+          component={ ToDoList }
+          name='ToDoList'
+          options={({ route }) => {
+            return({
+              title: route.params.title,
+              headerStyle: {
+                backgroundColor: route.params.color
+              },
+              headerTintColor: 'white',
+            })
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
