@@ -5,7 +5,7 @@ import ToDoItem from '../components/ToDoItem'
 
 let renderAddListIcon = ( addItem ) => {
   return(
-    <TouchableOpacity onPress={ () => addItem( { text: "Hello2", isCheck: false } ) }>
+    <TouchableOpacity onPress={ () => addItem( { text: "Hello2", isChecked: false } ) }>
       <Text style={ styles.icon } >+</Text>
     </TouchableOpacity>
   )
@@ -13,7 +13,7 @@ let renderAddListIcon = ( addItem ) => {
 
 export default ( { navigation} ) => {
 
-  let [toDoItems, setToDoItems] = useState( [ { text: "Hello", isCheck: false } ] )
+  let [toDoItems, setToDoItems] = useState( [ { text: "Hello", isChecked: false } ] )
 
   let addItemToLists = ( item ) => {
     toDoItems.push(item)
@@ -22,6 +22,11 @@ export default ( { navigation} ) => {
 
   let removeItemFromLists = ( index ) => {
     toDoItems.splice( index, 1 )
+    setToDoItems( [...toDoItems] )
+  }
+
+  let updateItem = ( index, item ) => {
+    toDoItems[index] = item
     setToDoItems( [...toDoItems] )
   }
 
@@ -35,8 +40,24 @@ export default ( { navigation} ) => {
     <View style={ styles.container }>
       <FlatList
         data={ toDoItems }
-        renderItem={ ( { item: { text, isCheck }, index } ) => {
-          return <ToDoItem text={ text } isCheck={ isCheck } />
+        renderItem={ ( { item: { text, isChecked }, index } ) => {
+          return(
+            <ToDoItem
+              text={ text }
+
+              isChecked={ isChecked }
+              onChecked={() => {
+                let toDoItem = toDoItems[index]
+                toDoItem.isChecked = !isChecked
+                updateItem( index, toDoItem )
+              }}
+              onChangeText={ ( newText ) => {
+                let toDoItem = toDoItems[index]
+                toDoItem.text = newText
+                updateItem( index, toDoItem )
+              } }
+            />
+          )
         } }
       />
     </View>
