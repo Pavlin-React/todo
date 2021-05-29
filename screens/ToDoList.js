@@ -5,7 +5,7 @@ import ToDoItem from '../components/ToDoItem'
 
 let renderAddListIcon = ( addItem ) => {
   return(
-    <TouchableOpacity onPress={ () => addItem( { text: "Hello2", isChecked: false } ) }>
+    <TouchableOpacity onPress={ () => addItem( { text: "", isChecked: false } ) }>
       <Text style={ styles.icon } >+</Text>
     </TouchableOpacity>
   )

@@ -11,7 +11,7 @@ export default ( { text, isChecked, onChecked, onChangeText } ) => {
     <View style={ styles.container }>
       <View style={ { flexDirection: 'row', flex: 1 } } >
         <Checkbox isChecked={ isChecked } onChecked={ onChecked } />
-        <TouchableOpacity style={ { flex: 1 } }onPress={ () => setIsEditMode( true ) } >
+        <TouchableOpacity style={ { flex: 1 } }onPress={ () => !isChecked && setIsEditMode( true ) } >
           { isEditMode ?
             <TextInput
               autoFocus={ true }
@@ -25,7 +25,15 @@ export default ( { text, isChecked, onChecked, onChangeText } ) => {
               style={ [ styles.input, { outline: 'none' } ] }
               onBlur={ () => setIsEditMode( false ) }
             /> :
-            <Text style={ styles.text } >{ text }</Text>
+            <Text style={
+              [ styles.text,
+              { color: isChecked ?
+              Colors.lightGray :
+              Colors.black,
+              textDecorationLine: isChecked ? 'line-through' : 'none' } ] }
+            >
+              { text }
+            </Text>
           }
         </TouchableOpacity>
       </View>
@@ -59,5 +67,6 @@ const styles = StyleSheet.create({
   text: {
     padding: 3,
     fontSize: 16,
+    color: Colors.black
   }
 })
