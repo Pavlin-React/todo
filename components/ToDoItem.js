@@ -1,43 +1,57 @@
-import React, { useState, useLayoutEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, TextInput } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from "react-native";
 import Colors from "../constans/Colors";
 import Checkbox from './Checkbox'
 
-export default ( { text, isChecked, onChecked, onChangeText } ) => {
+let EditableText = ( { isChecked, onChangeText, text, isNewItem } ) => {
 
-  let [isEditMode, setIsEditMode] = useState( false )
+  let [isEditMode, setIsEditMode] = useState( isNewItem )
+
+  return(
+    <TouchableOpacity style={ { flex: 1 } }onPress={ () => !isChecked && setIsEditMode( true ) } >
+        { isEditMode ?
+          <TextInput
+            autoFocus={ true }
+            underlineColorAndroid={ 'transparent' }
+            selectionColor={ 'transparent' }
+            value={ text }
+            onChangeText={ onChangeText }
+            placeholder={ 'Add new item here' }
+            onSubmitEditing={ () => {} }
+            maxLength={ 30 }
+            style={ [ styles.input, { outline: 'none' } ] }
+            onBlur={ () => setIsEditMode( false ) }
+          /> :
+          <Text style={
+            [ styles.text,
+            { color: isChecked ?
+            Colors.lightGray :
+            Colors.black,
+            textDecorationLine: isChecked ? 'line-through' : 'none' } ] }
+          >
+            { text }
+          </Text>
+          }
+        </TouchableOpacity>
+  )
+}
+
+export default ( { text, isChecked, onChecked, onChangeText, onDelete, isNewItem} ) => {
 
   return(
     <View style={ styles.container }>
       <View style={ { flexDirection: 'row', flex: 1 } } >
         <Checkbox isChecked={ isChecked } onChecked={ onChecked } />
-        <TouchableOpacity style={ { flex: 1 } }onPress={ () => !isChecked && setIsEditMode( true ) } >
-          { isEditMode ?
-            <TextInput
-              autoFocus={ true }
-              underlineColorAndroid={ 'transparent' }
-              selectionColor={ 'transparent' }
-              value={ text }
-              onChangeText={ onChangeText }
-              placeholder={ 'Add new item here' }
-              onSubmitEditing={ () => {} }
-              maxLength={ 30 }
-              style={ [ styles.input, { outline: 'none' } ] }
-              onBlur={ () => setIsEditMode( false ) }
-            /> :
-            <Text style={
-              [ styles.text,
-              { color: isChecked ?
-              Colors.lightGray :
-              Colors.black,
-              textDecorationLine: isChecked ? 'line-through' : 'none' } ] }
-            >
-              { text }
-            </Text>
-          }
-        </TouchableOpacity>
+        <EditableText
+          onChangeText={ onChangeText } 
+          isChecked={ isChecked }
+          text={ text }
+          isNewItem={ isNewItem }
+        />
       </View>
-      {/* <Remove/> */}
+      <TouchableOpacity onPress={ onDelete }>
+        <Text style={ [ styles.icon, { color: Colors.red } ] }>X</Text>
+      </TouchableOpacity>
     </View>
 
   )

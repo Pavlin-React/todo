@@ -5,7 +5,7 @@ import ToDoItem from '../components/ToDoItem'
 
 let renderAddListIcon = ( addItem ) => {
   return(
-    <TouchableOpacity onPress={ () => addItem( { text: "", isChecked: false } ) }>
+    <TouchableOpacity onPress={ () => addItem( { text: "", isChecked: false, isNewItem: true } ) }>
       <Text style={ styles.icon } >+</Text>
     </TouchableOpacity>
   )
@@ -40,11 +40,11 @@ export default ( { navigation} ) => {
     <View style={ styles.container }>
       <FlatList
         data={ toDoItems }
-        renderItem={ ( { item: { text, isChecked }, index } ) => {
+        renderItem={ ( { item: { text, isChecked, isNewItem }, index } ) => {
           return(
             <ToDoItem
               text={ text }
-
+              isNewItem={ isNewItem }
               isChecked={ isChecked }
               onChecked={() => {
                 let toDoItem = toDoItems[index]
@@ -56,6 +56,7 @@ export default ( { navigation} ) => {
                 toDoItem.text = newText
                 updateItem( index, toDoItem )
               } }
+              onDelete={ () => removeItemFromLists( index ) }
             />
           )
         } }

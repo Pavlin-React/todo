@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, FlatList } from "react-native
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Colors from "../constans/Colors";
 
-let ListButton = ( { title, color, onPress, onDelete } ) => {
+let ListButton = ( { title, color, onPress, onDelete, onOptions } ) => {
   return (
     <TouchableOpacity
     onPress={ onPress }
@@ -13,7 +13,7 @@ let ListButton = ( { title, color, onPress, onDelete } ) => {
         <Text style={styles.itemTitle}>{ title }</Text>
       </View>
       <View style={{ flexDirection: "row" }}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={ onOptions }>
           <Ionicons name="options-outline" size={24} color="white" />
         </TouchableOpacity>
         <TouchableOpacity onPress={ onDelete }>
@@ -24,9 +24,9 @@ let ListButton = ( { title, color, onPress, onDelete } ) => {
   );
 };
 
-let renderAddListIcon = ( addItem ) => {
+let renderAddListIcon = ( navigation ) => {
   return(
-    <TouchableOpacity onPress={ () => addItem({ title: 'Title', color: Colors.orange }) } >
+    <TouchableOpacity onPress={ () => navigation.navigate( 'EditList', {} ) } >
       <Text style={ styles.icon } >+</Text>
     </TouchableOpacity>
   )
@@ -54,7 +54,7 @@ export default ( { navigation } ) => {
 
   useLayoutEffect( () => {
     navigation.setOptions({
-      headerRight: () => renderAddListIcon( addItemToLists )
+      headerRight: () => renderAddListIcon( navigation )
     })
   } )
 
@@ -69,6 +69,7 @@ export default ( { navigation } ) => {
               color={ color }
               navigation={ navigation }
               onPress={() => { navigation.navigate( 'ToDoList', { title, color } ) }}
+              onOptions={ () => { navigation.navigate( 'EditList', { title, color } ) } }
               onDelete = { () => removeItemFromLists( index ) }
             />
           )
