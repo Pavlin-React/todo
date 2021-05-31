@@ -24,9 +24,9 @@ let ListButton = ( { title, color, onPress, onDelete, onOptions } ) => {
   );
 };
 
-let renderAddListIcon = ( navigation ) => {
+let renderAddListIcon = ( navigation, addItemToLists ) => {
   return(
-    <TouchableOpacity onPress={ () => navigation.navigate( 'EditList', {} ) } >
+    <TouchableOpacity onPress={ () => navigation.navigate( 'EditList', { saveChanges: addItemToLists } ) } >
       <Text style={ styles.icon } >+</Text>
     </TouchableOpacity>
   )
@@ -52,9 +52,14 @@ export default ( { navigation } ) => {
     setLists( [...lists] )
   }
 
+  let updateItemFromList = ( index, item ) => {
+    lists[index] = item
+    setLists( [...lists] )
+  }
+
   useLayoutEffect( () => {
     navigation.setOptions({
-      headerRight: () => renderAddListIcon( navigation )
+      headerRight: () => renderAddListIcon( navigation, addItemToLists )
     })
   } )
 
@@ -69,7 +74,10 @@ export default ( { navigation } ) => {
               color={ color }
               navigation={ navigation }
               onPress={() => { navigation.navigate( 'ToDoList', { title, color } ) }}
-              onOptions={ () => { navigation.navigate( 'EditList', { title, color } ) } }
+              onOptions={ () => { navigation.navigate( 'EditList',
+              { title,
+              color,
+              saveChanges: ( item ) => updateItemFromList( index, item )  } ) } }
               onDelete = { () => removeItemFromLists( index ) }
             />
           )

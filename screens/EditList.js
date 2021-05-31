@@ -1,33 +1,76 @@
 import React, { useState } from "react";
+import { CommonActions } from '@react-navigation/native'
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from "react-native";
 import Colors from "../constans/Colors";
+import ColorSelector from '../components/ColorSelector'
+
+let colorOptions = [
+  'black',
+  'darkGray',
+  'gray',
+  'lightGray',
+  'teal',
+  'green',
+  'blue',
+  'purple',
+  'blueGray',
+  'orange',
+  'red',
+  'pink',
+  'olive',
+  'yellow'
+]
 
 export default ( { navigation, route } ) => {
 
   let [title, setTitle] = useState( route.params.title || '' )
   let [color, setColor] = useState( route.params.colors || Colors.blue )
+  let [isValid, setValidity] = useState( true )
 
   return(
     <View style={ styles.container } >
       <View>
-        <Text
-          style={ styles.label }
-        >
-          List Name
-        </Text>
+        <View style={ { flexDirection: 'row' } } >
+          <Text
+            style={ styles.label }
+          >
+            List Name
+          </Text>
+          { !isValid && <Text style={ { color: Colors.red, marginLeft: 10 } }>* List Name can not be empty</Text> }
+        </View>
         <TextInput
           autoFocus={ true }
           underlineColorAndroid={ 'transparent' }
           selectionColor={ 'transparent' }
           value={ title }
-          onChangeText={ setTitle }
+          onChangeText={
+            ( text ) => {
+              setTitle( text )
+              setValidity( true )
+            }}
           placeholder={ 'New List Name' }
           maxLength={ 30 }
           style={ [ styles.input, { outline: 'none' } ] }
         />
+        <Text style={ styles.label } >Choose Color</Text>
+        <ColorSelector
+          onSelect={(color) => {
+            setColor( color )
+            navigation.dispatch( CommonActions.setParams( { color } ) )
+          }}
+          selectedColor={ color }
+          colorOptions = { colorOptions }
+        />
       </View>
-      <TouchableOpacity onPress={ () => {} } >
-        <Text></Text>
+      <TouchableOpacity style={ styles.saveButton } onPress={ () => {
+        if ( title.length > 1 ) {
+          route.params.saveChanges( { title, color } )
+          navigation.dispatch( CommonActions.goBack() )
+        } else {
+          setValidity( false )
+        }
+      } } >
+        <Text style={ { color: 'white', fontSize: 24, fontWeight: 'bold' } } >Save</Text>
       </TouchableOpacity>
     </View>
   )
