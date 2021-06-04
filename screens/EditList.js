@@ -3,6 +3,7 @@ import { CommonActions } from '@react-navigation/native'
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from "react-native";
 import Colors from "../constans/Colors";
 import ColorSelector from '../components/ColorSelector'
+import Button from '../components/Button'
 
 let colorOptions = [
   'black',
@@ -62,16 +63,17 @@ export default ( { navigation, route } ) => {
           colorOptions = { colorOptions }
         />
       </View>
-      <TouchableOpacity style={ styles.saveButton } onPress={ () => {
-        if ( title.length > 1 ) {
-          route.params.saveChanges( { title, color } )
-          navigation.dispatch( CommonActions.goBack() )
-        } else {
-          setValidity( false )
-        }
-      } } >
-        <Text style={ { color: 'white', fontSize: 24, fontWeight: 'bold' } } >Save</Text>
-      </TouchableOpacity>
+      <Button
+        text='Save'
+        onPress={ () => {
+          if ( title.length > 1 ) {
+            route.params.saveChanges( { title, color } )
+            navigation.dispatch( CommonActions.goBack() )
+          } else {
+            setValidity( false )
+          }
+        } }
+      />
     </View>
   )
 }

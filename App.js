@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import Home from "./screens/Home";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import ToDoList from "./screens/ToDoList";
+import Login from './screens/Login'
 import EditList from "./screens/EditList";
 import Colors from "./constans/Colors";
 import firebase from "firebase/app";
 
 let Stack = createStackNavigator();
 let AuthStack = createStackNavigator();
+
+let AuthScreens = () => {
+  return(
+    <AuthStack.Navigator>
+      <AuthStack.Screen name='Login' component={ Login }/>
+    </AuthStack.Navigator>
+  )
+}
 
 let Screens = () => {
   return (
@@ -47,9 +56,12 @@ let Screens = () => {
 };
 
 export default function App() {
+
+  let [isAuthenticated, setIsAuthenticated] = useState( false )
+
   return(
     <NavigationContainer>
-      <Screens/>
+      { isAuthenticated ? <Screens/> : <AuthScreens/> }
     </NavigationContainer>
   )
 }
