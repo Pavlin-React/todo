@@ -3,6 +3,29 @@ import LabelInput from '../components/LabeledInput'
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import Colors from "../constans/Colors";
 import Button from '../components/Button'
+import validator from 'validator'
+
+let validateFields = (email, password) => {
+  let isValid = {
+    email: validator.isEmail( email ),
+    password: validator.isStrongPassword( password, {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+    } )
+  }
+  return isValid
+}
+
+let login = (email, password ) => {
+
+}
+
+let createAccount = ( email, password ) => {
+
+}
 
 export default () => {
 
@@ -58,7 +81,30 @@ export default () => {
       </View>
       <Button
         buttonStyle={ { backgroundColor: Colors.red } }
-        onPress={ () => {} }
+        onPress={ () => {
+          let isValid = validateFields( emailField.text, passwordField.text )
+           let isAllValid = true
+          if ( !isValid.email ) {
+            emailField.errorMessage = 'Please enter a valid email'
+            setEmailField( { ...emailField } )
+            isAllValid = false
+          }
+          if ( !isValid.password ) {
+            passwordField.errorMessage = 'The password must be at least 8 characters long'
+            setPasswordField( { ...passwordField } )
+            isAllValid = false
+          }
+          if ( isCreateMode && passwordReentryField.text != passwordField.text ) {
+            passwordReentryField.errorMessage = 'Password do not match'
+            setPasswordReentryField( { ...passwordReentryField } )
+            isAllValid = false
+          }
+          if ( isAllValid ) {
+            isCreateMode
+            ? createAccount( emailField.text, passwordField.text )
+            : login( emailField.text, passwordField.text )
+          }
+        } }
         text={ isCreateMode ? 'Create Account' : 'Login' }
       />
     </View>

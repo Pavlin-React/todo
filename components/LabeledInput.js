@@ -11,8 +11,8 @@ export default ( { labelStyle, label, errorMessage, inputStyle, text, onChangeTe
         <Text style={ styles.error } >{ errorMessage && `*${ errorMessage }` }</Text>
       </View>
       <TextInput
-        underlineColorAndroid='transperant'
-        selectionColor='transperant'
+        underlineColorAndroid='transparent'
+        selectionColor='transparent'
         style={[styles.input, { outline: 'none' }, inputStyle]}
         value={ text }
         onChangeText={ onChangeText }
