@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput } from "react-native";
 import Colors from "../constans/Colors";
 import Button from '../components/Button'
 
-export default ( { labelStyle, label, errorMessage, inputStyle, text} ) => {
+export default ( { labelStyle, label, errorMessage, inputStyle, text, onChangeText, ...inputProps} ) => {
   return(
     <View style={ styles.container } >
       <View style={ styles.labelContainer } >
@@ -15,6 +15,8 @@ export default ( { labelStyle, label, errorMessage, inputStyle, text} ) => {
         selectionColor='transperant'
         style={[styles.input, { outline: 'none' }, inputStyle]}
         value={ text }
+        onChangeText={ onChangeText }
+        { ...inputProps }
       />
     </View>
   )
