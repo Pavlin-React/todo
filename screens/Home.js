@@ -26,9 +26,15 @@ let ListButton = ( { title, color, onPress, onDelete, onOptions } ) => {
 
 let renderAddListIcon = ( navigation, addItemToLists ) => {
   return(
-    <TouchableOpacity onPress={ () => navigation.navigate( 'EditList', { saveChanges: addItemToLists } ) } >
-      <Text style={ styles.icon } >+</Text>
-    </TouchableOpacity>
+    <View style={{ flexDirection: 'row' }}>
+      <TouchableOpacity style={ styles.settings } onPress={ () => navigation.navigate( 'Settings' ) } >
+        <Ionicons name="settings" size={18} />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={ () => navigation.navigate( 'EditList', { saveChanges: addItemToLists } ) } >
+        <Text style={ styles.icon } >+</Text>
+      </TouchableOpacity>
+      
+    </View>
   )
 }
 
@@ -105,6 +111,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 10,
     padding: 15,
+  },
+  settings: {
+    justifyContent: 'center',
+    marginTop: 10,
   },
   icon: {
     padding: 5,

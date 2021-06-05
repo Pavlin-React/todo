@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Home from "./screens/Home";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -6,7 +6,8 @@ import ToDoList from "./screens/ToDoList";
 import Login from './screens/Login'
 import EditList from "./screens/EditList";
 import Colors from "./constans/Colors";
-import firebase from "firebase/app";
+import firebase from 'firebase/app';
+import Settings from "./screens/Settings";
 
 let Stack = createStackNavigator();
 let AuthStack = createStackNavigator();
@@ -23,6 +24,7 @@ let Screens = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Fire App" component={Home} />
+      <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen
         component={ToDoList}
         name="ToDoList"
@@ -58,6 +60,20 @@ let Screens = () => {
 export default function App() {
 
   let [isAuthenticated, setIsAuthenticated] = useState( false )
+
+  useEffect( () => {
+    if ( firebase.auth().currentUser ) {
+      setIsAuthenticated( true )
+    }
+    firebase.auth().onAuthStateChanged( user => {
+      console.log( 'Checking auth state ...' );
+      if ( user ) {
+        setIsAuthenticated( true )
+      } else {
+        setIsAuthenticated( false )
+      }
+    } )
+  }, [] )
 
   return(
     <NavigationContainer>

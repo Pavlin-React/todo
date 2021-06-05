@@ -4,6 +4,8 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import Colors from "../constans/Colors";
 import Button from '../components/Button'
 import validator from 'validator'
+import firebase from "firebase/app"
+import "firebase/auth"
 
 let validateFields = (email, password) => {
   let isValid = {
@@ -20,14 +22,24 @@ let validateFields = (email, password) => {
 }
 
 let login = (email, password ) => {
-
+  firebase.auth()
+    .signInWithEmailAndPassword( email, password )
+    .then( () => {
+      console.log( 'Logged in' );
+    } )
 }
 
 let createAccount = ( email, password ) => {
-
+  firebase.auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then(({ user }) => {
+      console.log( 'Creating a user..' );
+    })
 }
 
 export default () => {
+
+  let [isCreateMode, setIsCreateMode] = useState( false )
 
   let [emailField, setEmailField] = useState({
     text: '',
@@ -42,20 +54,28 @@ export default () => {
     errorMessage: ''
   })
 
-  let [isCreateMode, setIsCreateMode] = useState( false )
 
   return(
     <View style={ styles.container } >
       <Text style={ styles.header } >🔥 ToDo</Text>
       <View style={ { flex: 1 } } >
         { isCreateMode && <LabelInput
+          label='Password Reentry'
+          text={passwordReentryField.text}
+          onChangeText={ ( text ) => { setPasswordReentryField( {text} ) } }
+          errorMessage={ passwordReentryField.errorMessage }
+          labelStyle={ styles.label }
+          secureTextEntry={ true }
+        
+        /> }
+        <LabelInput
           label='Email'
           text={emailField.text}
           onChangeText={ ( text ) => { setEmailField( {text} ) } }
           errorMessage={ emailField.errorMessage }
           labelStyle={ styles.label }
           autoCompleteType='email'
-        /> }
+        />
         <LabelInput
           label='Password'
           text={passwordField.text}
@@ -65,14 +85,7 @@ export default () => {
           secureTextEntry={ true }
 
         />
-        <LabelInput
-          label='Password Reentry'
-          text={passwordReentryField.text}
-          onChangeText={ ( text ) => { setPasswordReentryField( {text} ) } }
-          errorMessage={ passwordReentryField.errorMessage }
-          labelStyle={ styles.label }
-          secureTextEntry={ true }
-        />
+        
         <TouchableOpacity onPress={ () => setIsCreateMode( !isCreateMode ) }>
           <Text style={ { alignSelf: 'center', color: Colors.blue, fontSize: 16, margin: 4 } } >
             { isCreateMode ? 'Already have an account' : 'Create new account' }
