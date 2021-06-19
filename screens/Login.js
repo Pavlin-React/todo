@@ -59,15 +59,7 @@ export default () => {
     <View style={ styles.container } >
       <Text style={ styles.header } >🔥 ToDo</Text>
       <View style={ { flex: 1 } } >
-        { isCreateMode && <LabelInput
-          label='Password Reentry'
-          text={passwordReentryField.text}
-          onChangeText={ ( text ) => { setPasswordReentryField( {text} ) } }
-          errorMessage={ passwordReentryField.errorMessage }
-          labelStyle={ styles.label }
-          secureTextEntry={ true }
         
-        /> }
         <LabelInput
           label='Email'
           text={emailField.text}
@@ -85,6 +77,16 @@ export default () => {
           secureTextEntry={ true }
 
         />
+        { isCreateMode && <LabelInput
+          label='Password Reentry'
+          text={passwordReentryField.text}
+          onChangeText={ ( text ) => { setPasswordReentryField( {text} ) } }
+          errorMessage={ passwordReentryField.errorMessage }
+          labelStyle={ styles.label }
+          secureTextEntry={ true }
+        
+        /> }
+        
         
         <TouchableOpacity onPress={ () => setIsCreateMode( !isCreateMode ) }>
           <Text style={ { alignSelf: 'center', color: Colors.blue, fontSize: 16, margin: 4 } } >
